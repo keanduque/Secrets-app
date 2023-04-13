@@ -10,7 +10,7 @@ const session = require("express-session");
 const passport = require("passport");
 
 const app = express();
-const PORT = 3000 || process.env.PORT;
+const PORT = process.env.PORT || 3000;
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -27,12 +27,13 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-const ConnectDB = require("./server");
+const { connectDB } = require(__dirname + "/server");
+
 const user = require("./controllers/user");
 const User = require("./models/User").User;
 
 // Connect to DB
-ConnectDB()
+connectDB()
 	.then(() =>
 		app.listen(PORT, () => console.log(`Server started on PORT:${PORT}`))
 	)
