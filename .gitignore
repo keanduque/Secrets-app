@@ -128,3 +128,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# ignore specific file
+client_secret_979739176539-hcdv99s0mk6homkechpa7pjba901e9us.apps.googleusercontent.com.json
