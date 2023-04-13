@@ -55,10 +55,12 @@ passport.use(
 		},
 		function (accessToken, refreshToken, profile, cb) {
 			// npm i mongoose-findorcreate
-			console.log(profile);
-			User.findOrCreate({ googleId: profile.id }, function (err, user) {
-				return cb(err, user);
-			});
+			User.findOrCreate(
+				{ googleId: profile.id, username: profile.emails[0].value },
+				function (err, user) {
+					return cb(err, user);
+				}
+			);
 		}
 	)
 );
@@ -68,11 +70,22 @@ passport.use(
 			clientID: process.env.FB_APP_ID,
 			clientSecret: process.env.FB_APP_SECRET,
 			callbackURL: "http://localhost:3000/auth/facebook/secrets",
+			profileFields: ["id", "displayName", "name", "email"],
+			passReqToCallback: true,
 		},
-		function (accessToken, refreshToken, profile, cb) {
-			User.findOrCreate({ facebookId: profile.id }, function (err, user) {
-				return cb(err, user);
-			});
+		function (req, accessToken, refreshToken, profile, cb) {
+			console.log(profile);
+			User.findOrCreate(
+				{
+					facebookId: profile.id,
+					username: !profile.username
+						? profile.displayName
+						: profile.username,
+				},
+				function (err, user) {
+					return cb(err, user);
+				}
+			);
 		}
 	)
 );

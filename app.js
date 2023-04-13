@@ -127,6 +127,9 @@ app.route("/register")
 	})
 	.post(async (req, res) => {
 		//register is from passport-local-mongoose plugin
+
+		console.log("registerK:", req.body.username);
+
 		User.register(
 			{ username: req.body.username },
 			req.body.password,
@@ -155,6 +158,7 @@ app.route("/login")
 		});
 
 		req.login(user, (err) => {
+			console.log(user);
 			if (err) {
 				console.log(err);
 			} else {
